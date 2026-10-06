@@ -5,6 +5,7 @@ import Curtain from './components/Curtain';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Marquee from './components/Marquee';
+import Spine from './components/Spine';
 import Hero from './sections/Hero';
 import Work from './sections/Work';
 import Experience from './sections/Experience';
@@ -26,6 +27,7 @@ export default function App() {
       </a>
       <Header />
       <main id="main">
+        <Spine />
         <Hero />
         <Marquee />
         <Work />

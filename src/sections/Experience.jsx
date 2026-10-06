@@ -8,11 +8,13 @@ export default function Experience() {
         <SectionHead id="experience-title" solid="Experience" outline="& training" />
 
         <ol className="xp">
-          {experience.map((x) => (
+          {experience.map((x, i) => (
             <li key={x.role + x.org} className="xp__row reveal">
               <p className="xp__period">{x.period}</p>
               <div className="xp__who">
-                <h3 className="xp__role display">{x.role}</h3>
+                <h3 id={`xp-${i}`} className="xp__role display">
+                  {x.role}
+                </h3>
                 <p className="xp__org">{x.org}</p>
               </div>
               <ul className="xp__points">

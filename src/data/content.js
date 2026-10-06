@@ -8,6 +8,7 @@ export const profile = {
   shortName: 'Youssef Emad',
   role: 'Full-stack developer',
   location: 'Giza, Egypt',
+  timeZone: 'Africa/Cairo',
   email: 'youssefemadhassan66@gmail.com',
   phone: '+20 150 159 8998',
   phoneHref: 'tel:+201501598998',

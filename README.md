@@ -50,7 +50,8 @@ All scroll animation runs from one loop in [`src/motion/motion.js`](src/motion/m
 
 - Load curtain with the logo drawing itself, then masked word reveals in the hero
 - Hero lines part, text fades and the portrait drifts as you scroll; the portrait follows the mouse
-- Rotating "See my work" ring, two text bands that speed up with scrolling
+- Rotating "See my work" ring, a tilted ribbon and an outlined band that speed up with scrolling
+- Git-graph line in the left gutter (desktop): a node per section heading and per job in Experience, filled as you scroll, with the current node in red (`src/components/Spine.jsx`)
 - `data-speed` (vertical) and `data-drift` (horizontal) parallax on any element
 - Section titles reveal word by word (`.split` + `Words` component)
 - Header hides on scroll down and returns on scroll up

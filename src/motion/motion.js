@@ -36,12 +36,35 @@ export function startMotion() {
     h: 0,
   }));
 
+  // Git-graph line in the left gutter: one node per heading, filled down to the viewport centre.
+  const spine = document.querySelector('.spine');
+  const spineFill = spine?.querySelector('.spine__fill');
+  const marks = spine
+    ? [...spine.querySelectorAll('.spine__node')]
+        .map((el) => ({ el, target: document.getElementById(el.dataset.for), y: 0, state: 0 }))
+        .filter((m) => m.target)
+    : [];
+  let spineTop = 0;
+  let spineH = 1;
+
   let heroH = 1;
 
   // Cache untransformed positions so the loop never reads layout.
   function measure() {
     const y = window.scrollY;
     heroH = hero ? hero.offsetHeight : 1;
+    if (spine && marks.length > 1) {
+      for (const m of marks) {
+        const r = m.target.getBoundingClientRect();
+        m.y = r.top + y + r.height / 2;
+      }
+      spineTop = marks[0].y;
+      spineH = Math.max(1, marks[marks.length - 1].y - spineTop);
+      spine.style.top = `${spineTop}px`;
+      spine.style.height = `${spineH}px`;
+      for (const m of marks) m.el.style.top = `${m.y - spineTop}px`;
+      spine.classList.add('is-ready');
+    }
     for (const it of items) {
       it.el.style.translate = 'none';
       const r = it.el.getBoundingClientRect();
@@ -131,6 +154,21 @@ export function startMotion() {
       }
     }
 
+    if (spineFill) {
+      const mid = y + vh * 0.5;
+      spineFill.style.transform = `scaleY(${clamp((mid - spineTop) / spineH, 0, 1).toFixed(4)})`;
+      let active = -1;
+      for (let i = 0; i < marks.length; i++) if (marks[i].y <= mid) active = i;
+      for (let i = 0; i < marks.length; i++) {
+        const s = i === active ? 2 : i < active ? 1 : 0;
+        if (marks[i].state !== s) {
+          marks[i].state = s;
+          marks[i].el.classList.toggle('is-passed', s === 1);
+          marks[i].el.classList.toggle('is-active', s === 2);
+        }
+      }
+    }
+
     for (const it of items) {
       const prog = (it.top + it.h / 2 - y - vh / 2) / vh;
       if (prog < -1.5 || prog > 1.5) continue;
@@ -160,6 +198,8 @@ export function startMotion() {
     for (const it of items) it.el.style.translate = '';
     for (const r of rows) r.el.style.translate = '';
     header?.classList.remove('is-hidden');
+    spine?.classList.remove('is-ready');
+    for (const m of marks) m.el.classList.remove('is-passed', 'is-active');
     hero?.style.removeProperty('--hero-p');
     hero?.style.removeProperty('--mx');
   };

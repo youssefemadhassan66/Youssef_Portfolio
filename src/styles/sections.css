@@ -1,3 +1,7 @@
+main {
+  position: relative;
+}
+
 /* =========================================================
    Header
    ========================================================= */
@@ -187,21 +191,32 @@
    ========================================================= */
 
 .hero {
-  --fs: clamp(3.4rem, 0.2rem + 14vw, 10.5rem);
+  /* Tracks the viewport so "Developer." always ends before the portrait's head. */
+  --fs: clamp(3.4rem, 12.3vw, 10.25rem);
   --hero-p: 0; /* scroll progress through the hero, set by motion.js */
   --mx: 0; /* pointer x from -1 to 1, set by motion.js */
   position: relative;
-  padding-top: clamp(7rem, 12vh, 9.5rem);
-  padding-bottom: calc(var(--fs) * 0.4);
+  padding-top: clamp(6.25rem, 11vh, 8.5rem);
+  padding-bottom: 2rem; /* clearance under the text; the portrait runs this far lower */
   overflow: clip;
 }
 
+/* Type on the left, portrait on a red disc on the right. The title spans both columns. */
 .hero__inner {
   position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  grid-template-rows: auto auto 1fr;
+  column-gap: clamp(1rem, 3vw, 3rem);
+  align-items: start;
+}
+
+.hero__top {
+  grid-area: 1 / 1 / 2 / -1;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem 2rem;
 }
 
 .hero__hello {
@@ -211,10 +226,25 @@
   color: var(--ink-2);
 }
 
+.hero__time {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.hero__time time {
+  color: var(--ink);
+  font-weight: 500;
+}
+
 /* Supporting text fades and lifts away as the hero scrolls out. */
-.hero__hello,
-.hero__foot,
-.hero__ctas {
+.hero__top,
+.hero__copy {
   opacity: calc(1 - var(--hero-p) * 1.5);
   translate: 0 calc(var(--hero-p) * -48px);
 }
@@ -242,13 +272,17 @@
 }
 
 .hero__title {
+  grid-area: 2 / 1 / 3 / -1;
+  position: relative;
+  z-index: 3;
+  margin-top: 0.12em;
   font-size: var(--fs);
   line-height: 0.92;
-  margin-top: 0.12em;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   white-space: nowrap;
+  pointer-events: none;
 }
 
 .hero__line {
@@ -256,14 +290,27 @@
   display: block;
 }
 
+/* Second line steps in to the right. */
+.hero__line--two {
+  padding-left: 0.8em;
+}
+
+.hero__line--two .outline {
+  -webkit-text-stroke-width: max(1.2px, 0.012em);
+}
+
+/* Solid full stop after the outlined word. Ink, because it lands on the red disc. */
+.hero__stop {
+  color: var(--ink);
+}
+
 /* The two lines part as the hero scrolls away and lean toward the pointer. */
-.hero__line--one .hero__drift,
-.hero__line--one .hero__orb {
-  translate: calc(var(--hero-p) * -16vw + var(--mx) * -10px) 0;
+.hero__line--one .hero__drift {
+  translate: calc(var(--hero-p) * -9vw + var(--mx) * -10px) 0;
 }
 
 .hero__line--two .hero__drift {
-  translate: calc(var(--hero-p) * 16vw + var(--mx) * 10px) 0;
+  translate: calc(var(--hero-p) * 11vw + var(--mx) * 10px) 0;
 }
 
 /* On load each line rises from behind its mask. */
@@ -278,16 +325,69 @@
   }
 }
 
-.hero__line--two .outline {
-  -webkit-text-stroke-width: max(1.2px, 0.012em);
+/* ---------- Stage: red disc, portrait, rotating badge ---------- */
+
+.hero__stage {
+  grid-area: 2 / 2 / 4 / 3;
+  position: relative;
+  z-index: 1;
+  align-self: end;
+  width: 100%;
+  margin-block: -0.3em -2rem;
+  font-size: var(--fs); /* em-based children scale with the type */
 }
 
-/* Round badge over the first line: rotating text ring around an arrow. */
+.hero__disc {
+  position: absolute;
+  left: 3%;
+  top: 13%;
+  width: 94%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--accent);
+  translate: calc(var(--mx) * -22px) calc(var(--hero-p) * 10%);
+  animation: disc-in 1.3s var(--ease-quart) backwards;
+  animation-delay: calc(var(--intro-delay) + 0.1s);
+}
+
+@keyframes disc-in {
+  from {
+    transform: scale(0.15);
+    opacity: 0;
+  }
+}
+
+.hero__portrait {
+  position: relative;
+  z-index: 2;
+  display: block;
+  pointer-events: none;
+  translate: calc(var(--mx) * 14px) calc(var(--hero-p) * 14%);
+  scale: calc(1 + var(--hero-p) * 0.05);
+  animation: portrait-in 1.5s var(--ease-quart) backwards;
+  animation-delay: calc(var(--intro-delay) + 0.25s);
+}
+
+@keyframes portrait-in {
+  from {
+    opacity: 0;
+    transform: translateY(12%) scale(0.95);
+  }
+}
+
+/* The cropped shoulders dissolve at the sides; the ribbon covers the base. */
+.hero__portrait img {
+  width: 100%;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 14%, #000 86%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 14%, #000 86%, transparent 100%);
+}
+
+/* Round badge: rotating text ring around an arrow. */
 .hero__orb {
   position: absolute;
-  left: 39%;
-  bottom: -0.1em;
-  z-index: 3;
+  left: -3%;
+  bottom: 27%;
+  z-index: 4;
   display: grid;
   place-items: center;
   width: 0.62em;
@@ -297,8 +397,9 @@
   background: var(--paper);
   color: var(--ink);
   box-shadow: var(--shadow);
+  translate: calc(var(--mx) * -12px) 0;
   animation: orb-in 0.9s var(--ease-quart) backwards;
-  animation-delay: calc(var(--intro-delay) + 0.6s);
+  animation-delay: calc(var(--intro-delay) + 0.7s);
   transition:
     transform 0.5s var(--ease-out),
     background-color 0.3s ease,
@@ -339,83 +440,43 @@
   color: var(--paper);
 }
 
-/* Portrait: in front of the outlined line, behind the first. Sized in em so it scales with the type. */
-.hero__portrait {
-  position: absolute;
-  left: 50%;
-  top: -0.06em;
-  z-index: 2;
-  width: 2.75em;
-  margin-left: -1.375em;
-  pointer-events: none;
-  translate: calc(var(--mx) * 18px) calc(var(--hero-p) * 14%);
-  scale: calc(1 + var(--hero-p) * 0.06);
-  animation: portrait-in 1.5s var(--ease-quart) backwards;
-  animation-delay: calc(var(--intro-delay) + 0.2s);
-}
+/* ---------- Copy under the title ---------- */
 
-@keyframes portrait-in {
-  from {
-    opacity: 0;
-    transform: translateY(14%) scale(0.94);
-  }
-}
-
-/* Fade the bottom and the cropped shoulders so the photo dissolves into the page. */
-.hero__portrait img {
-  width: 100%;
-  -webkit-mask-image:
-    linear-gradient(to bottom, #000 58%, transparent 94%),
-    linear-gradient(to right, transparent 0%, #000 18%, #000 82%, transparent 100%);
-  -webkit-mask-composite: source-in;
-  mask-image:
-    linear-gradient(to bottom, #000 58%, transparent 94%),
-    linear-gradient(to right, transparent 0%, #000 18%, #000 82%, transparent 100%);
-  mask-composite: intersect;
-}
-
-.hero__foot {
+.hero__copy {
+  grid-area: 3 / 1 / 4 / 2;
   position: relative;
-  z-index: 1;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1.5rem;
-  width: 100%;
-  margin-top: calc(var(--fs) * 0.06);
+  z-index: 3;
+  align-self: start;
+  justify-items: start;
+  display: grid;
+  gap: clamp(1.25rem, 2vw, 1.75rem);
+  margin-top: clamp(1.25rem, 2.4vw, 2.25rem);
 }
 
 .hero__after {
-  font-size: clamp(1.15rem, 0.75rem + 1.05vw, 1.85rem);
+  font-size: clamp(1.4rem, 0.9rem + 1.5vw, 2.2rem);
   font-weight: 300;
-  line-height: 1.25;
-  text-align: left;
-  max-width: 38%;
+  line-height: 1.15;
+}
+
+.hero__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
 
 .hero__worked ul {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 0.4rem 1.6rem;
-  max-width: 22rem;
+  gap: 0.3rem 1.4rem;
+  margin-top: 0.4rem;
 }
 
 .hero__worked li {
   font-size: 0.95rem;
   font-weight: 600;
   letter-spacing: -0.01em;
-  color: var(--ink-3);
-}
-
-.hero__ctas {
-  position: relative;
-  z-index: 3;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: calc(var(--fs) * 1.15);
+  color: var(--ink-2);
 }
 
 /* Load choreography (fill "backwards" so scroll-driven opacity takes over afterwards). */
@@ -431,20 +492,58 @@
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 900px) {
   .hero {
-    --fs: clamp(2.7rem, 0.2rem + 14vw, 6rem);
-    padding-bottom: 3rem;
+    --fs: clamp(2.8rem, 0.4rem + 17vw, 6.5rem);
+    padding-top: 6rem;
+    padding-bottom: 0;
   }
 
-  /* Portrait drops into the flow under the title on small screens. */
-  .hero__portrait {
-    position: relative;
-    display: block;
-    left: auto;
-    top: auto;
-    width: min(5em, 84vw);
-    margin: -0.42em auto 0;
+  /* One column: type, then the portrait on its disc, then the copy. */
+  .hero__inner {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+  }
+
+  .hero__top,
+  .hero__title,
+  .hero__stage,
+  .hero__copy {
+    grid-area: auto;
+  }
+
+  /* The hero is much taller here; fading the copy by scroll progress would hide the buttons. */
+  .hero__top,
+  .hero__copy {
+    opacity: 1;
+    translate: none;
+  }
+
+  .hero__time {
+    display: none;
+  }
+
+  /* No ribbon over the portrait's base here, so dissolve it instead. */
+  .hero__portrait img {
+    -webkit-mask-image:
+      linear-gradient(to bottom, #000 68%, transparent 100%),
+      linear-gradient(to right, transparent 0%, #000 14%, #000 86%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(to bottom, #000 68%, transparent 100%),
+      linear-gradient(to right, transparent 0%, #000 14%, #000 86%, transparent 100%);
+    mask-composite: intersect;
+  }
+
+  .hero__stage {
+    width: min(100%, 25rem);
+    justify-self: center;
+    margin-block: 0.2rem 0;
+  }
+
+  .hero__copy {
+    margin-top: 0.5rem;
+    padding-bottom: 2.5rem;
   }
 
   /* No room beside the words on a phone; the buttons below do the same job. */
@@ -452,42 +551,52 @@
     display: none;
   }
 
-  .hero__foot {
-    flex-direction: column;
-    margin-top: -2rem;
-    gap: 1.25rem;
-  }
-
-  .hero__after {
-    max-width: none;
-    text-align: center;
-    font-size: 1.35rem;
-  }
-
-  .hero__worked ul {
-    justify-content: center;
-  }
-
   .hero__ctas {
-    margin-top: 1.75rem;
     flex-direction: column;
     width: 100%;
-    max-width: 22rem;
+    max-width: 24rem;
+  }
+
+  .hero__ctas .btn {
+    width: 100%;
   }
 }
 
 /* =========================================================
-   Scrolling bands
+   Ribbons
    ========================================================= */
 
+/* A tilted ink ribbon over the base of the portrait, then a straight outlined one. */
 .band {
-  overflow: hidden;
-  padding-block: clamp(1.25rem, 3vw, 2.5rem);
-  border-block: 1px solid var(--line);
+  position: relative;
+  z-index: 4;
+  margin-top: clamp(-4.5rem, -5.5vw, -1.5rem);
+  padding-top: clamp(1rem, 2.4vw, 2.25rem);
+  overflow-x: clip;
   font-family: var(--font-display);
-  font-size: clamp(2.6rem, 1.4rem + 5.5vw, 7rem);
-  line-height: 1.02;
+  font-size: clamp(2.3rem, 1rem + 4.8vw, 5.75rem);
+  line-height: 1;
   user-select: none;
+}
+
+.band__tape {
+  overflow: hidden;
+  padding-block: 0.2em 0.26em;
+}
+
+.band__tape--ink {
+  width: 108%;
+  margin-left: -4%;
+  background: var(--ink);
+  color: var(--paper);
+  transform: rotate(-2.2deg);
+  box-shadow: var(--shadow);
+}
+
+.band__tape--paper {
+  margin-top: 0.5em;
+  border-block: 1px solid var(--line-strong);
+  background: var(--paper);
 }
 
 .band__row {
@@ -504,7 +613,7 @@
   padding-right: 0.32em;
 }
 
-.band__row--outline .outline {
+.band__tape--paper .outline {
   -webkit-text-stroke-width: max(1.2px, 0.012em);
 }
 
@@ -514,6 +623,96 @@
   height: 0.16em;
   border-radius: 50%;
   background: var(--accent);
+}
+
+/* =========================================================
+   Git-graph line in the left gutter
+   ========================================================= */
+
+.spine {
+  display: none;
+}
+
+@media (min-width: 1100px) and (prefers-reduced-motion: no-preference) {
+  .spine {
+    display: block;
+    position: absolute;
+    z-index: 2;
+    left: calc((100% - min(100%, var(--container))) / 2 + var(--gutter) * 0.3);
+    top: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+
+  .spine.is-ready {
+    opacity: 1;
+  }
+}
+
+.spine__line,
+.spine__fill {
+  position: absolute;
+  top: 0;
+  height: 100%;
+}
+
+.spine__line {
+  left: -0.5px;
+  width: 1px;
+  background: var(--line-strong);
+  opacity: 0.2;
+}
+
+.spine__fill {
+  left: -0.75px;
+  width: 1.5px;
+  background: var(--ink);
+  transform-origin: top;
+  transform: scaleY(0);
+}
+
+.spine__node {
+  --ring: var(--paper);
+  position: absolute;
+  left: 0;
+  width: 11px;
+  height: 11px;
+  margin: -5.5px 0 0 -5.5px;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  background: var(--paper);
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.5s var(--ease-out),
+    box-shadow 0.3s ease;
+}
+
+.spine__node--commit {
+  width: 7px;
+  height: 7px;
+  margin: -3.5px 0 0 -3.5px;
+}
+
+.spine__node--end {
+  --ring: var(--inv-paper);
+}
+
+.spine__node.is-passed {
+  background: var(--ink);
+}
+
+/* The current node is a solid red dot inside a ring, like the merge commit in the logo. */
+.spine__node.is-active {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow:
+    0 0 0 2px var(--ring),
+    0 0 0 3.5px var(--accent);
+  transform: scale(1.15);
 }
 
 /* =========================================================
@@ -689,6 +888,17 @@
   gap: clamp(2rem, 5vw, 5rem);
   margin-top: clamp(2rem, 4vw, 3rem);
   align-items: start;
+}
+
+/* Alternate the diagram panel from side to side so the list is not one repeated row. */
+@media (min-width: 901px) {
+  .case:nth-child(even) .case__body {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  }
+
+  .case:nth-child(even) .case__text {
+    order: 2;
+  }
 }
 
 .case__summary {
