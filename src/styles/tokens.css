@@ -1,0 +1,87 @@
+/* Design tokens. Monochrome ink-on-paper with a single red accent dot. */
+:root {
+  color-scheme: light;
+
+  --paper: oklch(0.99 0.002 90);
+  --paper-2: oklch(0.965 0.003 90);
+  --ink: oklch(0.225 0.003 90);
+  --ink-2: oklch(0.42 0.004 90);
+  --ink-3: oklch(0.53 0.004 90);
+  --line: oklch(0.9 0.003 90);
+  --line-strong: oklch(0.225 0.003 90);
+  --accent: oklch(0.62 0.2 24);
+  --on-ink: oklch(0.99 0.002 90);
+  --shadow: 0 10px 30px -12px oklch(0.2 0.01 90 / 0.35);
+
+  /* Inverted block (contact section). */
+  --inv-paper: oklch(0.2 0.003 90);
+  --inv-ink: oklch(0.97 0.002 90);
+  --inv-ink-2: oklch(0.76 0.003 90);
+  --inv-line: oklch(0.34 0.003 90);
+
+  --font-display: 'Anton', 'Media Sans Semicondensed', Impact, 'Arial Narrow', sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', Roboto,
+    sans-serif;
+
+  --step--1: 0.8125rem;
+  --step-0: 1.0625rem;
+  --step-1: clamp(1.2rem, 1.05rem + 0.5vw, 1.45rem);
+  --step-2: clamp(1.5rem, 1.2rem + 1.2vw, 2.1rem);
+  --step-3: clamp(2.4rem, 1.4rem + 4vw, 4.5rem);
+  --step-4: clamp(3.4rem, 1rem + 9vw, 8.5rem);
+  --step-hero: clamp(4.2rem, 0.6rem + 12.5vw, 11.5rem);
+
+  --gutter: clamp(1rem, 4vw, 3rem);
+  --container: 1320px;
+  --section-pad: clamp(5rem, 11vw, 9.5rem);
+  --radius: 6px;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+
+  /* Entrance animations wait for the load curtain when it plays. */
+  --intro-delay: 0s;
+}
+
+:root.intro {
+  --intro-delay: 0.9s;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --paper: oklch(0.175 0.003 90);
+    --paper-2: oklch(0.21 0.003 90);
+    --ink: oklch(0.95 0.003 90);
+    --ink-2: oklch(0.78 0.004 90);
+    --ink-3: oklch(0.67 0.004 90);
+    --line: oklch(0.3 0.003 90);
+    --line-strong: oklch(0.95 0.003 90);
+    --accent: oklch(0.68 0.19 24);
+    --on-ink: oklch(0.175 0.003 90);
+    --shadow: 0 10px 30px -12px oklch(0 0 0 / 0.6);
+    --inv-paper: oklch(0.95 0.003 90);
+    --inv-ink: oklch(0.2 0.003 90);
+    --inv-ink-2: oklch(0.42 0.004 90);
+    --inv-line: oklch(0.82 0.003 90);
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --paper: oklch(0.175 0.003 90);
+  --paper-2: oklch(0.21 0.003 90);
+  --ink: oklch(0.95 0.003 90);
+  --ink-2: oklch(0.78 0.004 90);
+  --ink-3: oklch(0.67 0.004 90);
+  --line: oklch(0.3 0.003 90);
+  --line-strong: oklch(0.95 0.003 90);
+  --accent: oklch(0.68 0.19 24);
+  --on-ink: oklch(0.175 0.003 90);
+  --shadow: 0 10px 30px -12px oklch(0 0 0 / 0.6);
+  --inv-paper: oklch(0.95 0.003 90);
+  --inv-ink: oklch(0.2 0.003 90);
+  --inv-ink-2: oklch(0.42 0.004 90);
+  --inv-line: oklch(0.82 0.003 90);
+}
