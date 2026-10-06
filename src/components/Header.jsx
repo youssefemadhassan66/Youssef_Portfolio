@@ -6,14 +6,23 @@ import Logo from './Logo';
 
 // Include the hero so no nav item is highlighted while it is in view.
 const ids = ['top', ...navLinks.map((l) => l.id)];
+// Contact is the "Let's talk" button on desktop, so it is left out of the centre links.
+const primary = navLinks.filter((l) => l.id !== 'contact');
+const newTab = <span className="sr-only"> (opens in a new tab)</span>;
 
-function ThemeToggle() {
+/** Two-option text switch, active option underlined. */
+function ThemeSwitch() {
   const [theme, toggle] = useTheme();
-  const next = theme === 'dark' ? 'light' : 'dark';
   return (
-    <button type="button" className="text-btn" onClick={toggle} aria-label={`Switch to ${next} theme`}>
-      {next === 'dark' ? 'Dark' : 'Light'}
-    </button>
+    <div className="theme-switch" role="group" aria-label="Colour theme">
+      <button type="button" aria-pressed={theme === 'light'} onClick={() => theme !== 'light' && toggle()}>
+        Light
+      </button>
+      <span aria-hidden="true">/</span>
+      <button type="button" aria-pressed={theme === 'dark'} onClick={() => theme !== 'dark' && toggle()}>
+        Dark
+      </button>
+    </div>
   );
 }
 
@@ -47,7 +56,7 @@ export default function Header() {
 
         <nav className="header__nav" aria-label="Primary">
           <ul>
-            {navLinks.map((l) => (
+            {primary.map((l) => (
               <li key={l.id}>
                 <a href={`#${l.id}`} aria-current={active === l.id ? 'true' : undefined}>
                   {l.label}
@@ -55,26 +64,26 @@ export default function Header() {
               </li>
             ))}
             <li>
-              <a href={profile.resume} download>
-                Résumé
-              </a>
-            </li>
-            <li>
               <a href={profile.github} target="_blank" rel="noreferrer">
-                GitHub<span className="sr-only"> (opens in a new tab)</span>
+                GitHub{newTab}
               </a>
             </li>
           </ul>
         </nav>
 
         <div className="header__actions">
-          <ThemeToggle />
+          <div className="header__desktop">
+            <ThemeSwitch />
+            <a className="btn btn--line btn--sm" href={profile.resume} download>
+              Resume
+            </a>
+          </div>
           <a className="btn btn--solid btn--sm header__cta" href="#contact">
             Let's talk
           </a>
           <button
             type="button"
-            className="text-btn header__menu"
+            className="header__menu"
             aria-expanded={open}
             aria-controls="mobile-nav"
             onClick={() => setOpen((o) => !o)}
@@ -85,25 +94,26 @@ export default function Header() {
       </div>
 
       <nav id="mobile-nav" className="mobile-nav" aria-label="Mobile" hidden={!open}>
-        <ul className="container">
-          {navLinks.map((l) => (
-            <li key={l.id}>
-              <a href={`#${l.id}`} className="display" onClick={close}>
-                {l.label}
-              </a>
-            </li>
-          ))}
-          <li>
-            <a href={profile.resume} download className="display" onClick={close}>
-              Résumé
+        <div className="container">
+          <ul>
+            {navLinks.map((l) => (
+              <li key={l.id}>
+                <a href={`#${l.id}`} className="display" onClick={close}>
+                  {l.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <div className="mobile-nav__foot">
+            <a className="link" href={profile.resume} download onClick={close}>
+              Resume (PDF)
             </a>
-          </li>
-          <li>
-            <a href={profile.github} target="_blank" rel="noreferrer" className="display" onClick={close}>
-              GitHub<span className="sr-only"> (opens in a new tab)</span>
+            <a className="link" href={profile.github} target="_blank" rel="noreferrer">
+              GitHub{newTab}
             </a>
-          </li>
-        </ul>
+            <ThemeSwitch />
+          </div>
+        </div>
       </nav>
     </header>
   );

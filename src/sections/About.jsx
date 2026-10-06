@@ -46,7 +46,7 @@ export default function About() {
             </p>
             <p className="about__cta reveal" style={{ '--d': 3 }}>
               <a className="btn btn--solid" href={profile.resume} download>
-                Download résumé
+                Download resume
               </a>
               <a className="btn btn--line" href="#contact">
                 Contact me

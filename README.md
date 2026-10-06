@@ -17,12 +17,12 @@ All copy lives in [`src/data/content.js`](src/data/content.js):
 
 | Export | What it controls |
 |---|---|
-| `profile` | Name, contact details, hero sentence, "worked with" names, intro |
+| `profile` | Name, contact details, hero sentence and summary, intro |
 | `featured` | The four case studies in **Selected work** (summary, highlights, stack, links, evidence panel) |
 | `moreWork` | The compact **More projects** list |
 | `githubRepos` | The **More on GitHub** grid of smaller public repositories |
 | `experience`, `education`, `certificates` | The **Experience & training** section |
-| `stack`, `profile.coreStack` | The **Skills & tools** section |
+| `skillGroups`, `profile.coreStack` | The **Skills & tools** section (`core: true` items show filled) |
 
 Projects marked `access: 'private'` or `'client'` show a label instead of a code link.
 

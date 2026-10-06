@@ -19,7 +19,7 @@ function useClock(timeZone) {
 }
 
 export default function Hero() {
-  const { hero, workedWith, timeZone, location } = profile;
+  const { hero, timeZone, location } = profile;
   const time = useClock(timeZone);
 
   return (
@@ -27,10 +27,7 @@ export default function Hero() {
       <div className="container hero__inner">
         <div className="hero__top">
           <p className="hero__hello rise" style={{ '--d': 0 }}>
-            <span className="wave" aria-hidden="true">
-              👋
-            </span>
-            , {hero.hello}
+            {hero.hello}
           </p>
           <p className="hero__time rise" style={{ '--d': 1 }} aria-hidden="true">
             <span>{location}</span>
@@ -52,7 +49,6 @@ export default function Hero() {
               </span>
             </span>
           </span>
-          <span className="sr-only"> {hero.after}</span>
         </h1>
 
         {/* Decorative: the portrait stands on a red disc, the logo's merge dot enlarged. */}
@@ -80,8 +76,8 @@ export default function Hero() {
         </div>
 
         <div className="hero__copy">
-          <p className="hero__after rise" style={{ '--d': 3 }} aria-hidden="true">
-            {hero.after}
+          <p className="hero__summary rise" style={{ '--d': 3 }}>
+            {hero.summary}
           </p>
           <div className="hero__ctas rise" style={{ '--d': 4 }}>
             <a className="btn btn--solid" href="#work">
@@ -90,14 +86,6 @@ export default function Hero() {
             <a className="btn btn--line" href="#contact">
               You have a project
             </a>
-          </div>
-          <div className="hero__worked rise" style={{ '--d': 5 }}>
-            <p className="label">Worked with</p>
-            <ul>
-              {workedWith.map((name) => (
-                <li key={name}>{name}</li>
-              ))}
-            </ul>
           </div>
         </div>
       </div>

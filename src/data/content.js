@@ -17,13 +17,11 @@ export const profile = {
   github: GH,
   linkedin: 'https://www.linkedin.com/in/youssef-emad-037570250',
   hero: {
-    hello: 'my name is Youssef and I am a',
+    hello: "Hi, I'm Youssef, a",
     line1: 'Full-stack',
     line2: 'Developer',
-    after: 'based in Giza, Egypt.',
+    summary: 'I build web applications, APIs and dashboards end to end, from the database schema to the interface.',
   },
-  // Organizations and clients shown under the hero.
-  workedWith: ['iSchool', 'DEPI', 'NTI', 'Nook & Stitch'],
   intro:
     'I build full-stack web applications: multi-tenant SaaS, learning platforms, hospital systems and AI call automation. From the database schema to the last pixel.',
   coreStack: ['Node.js', 'React', 'TypeScript', '.NET', 'PostgreSQL', 'MongoDB'],
@@ -305,12 +303,6 @@ export const experience = [
     period: 'Jul 2023 – Sep 2023',
     points: ['Built full-stack applications with Angular, Express, Node.js and MongoDB.'],
   },
-  {
-    role: 'Full Stack Web Development',
-    org: 'YAT Learning Center',
-    period: 'Mar 2018 – Jul 2018',
-    points: ['Built and deployed PHP and Laravel applications backed by MySQL.'],
-  },
 ];
 
 export const education = {
@@ -324,26 +316,36 @@ export const certificates = [
   { name: 'AI Career Essentials (AiCE)', org: 'ALX', year: '2024' },
 ];
 
-// Grouped by where it sits in a product, not by self-rated percentages.
-export const stack = [
+// Skill groups. `core` marks what I use day to day (shown filled); the rest I have shipped with.
+const s = (name, core = false) => ({ name, core });
+
+export const skillGroups = [
   {
-    area: 'Back end',
-    items: ['Node.js', 'Express', 'C# / ASP.NET Core', 'Python / FastAPI', 'REST & GraphQL APIs', 'JWT & OAuth'],
+    area: 'Languages',
+    items: [s('JavaScript', true), s('TypeScript', true), s('C#', true), s('SQL', true), s('Python'), s('PHP')],
   },
   {
     area: 'Front end',
-    items: ['React', 'TypeScript', 'Angular', 'Vite', 'Accessible, responsive CSS'],
+    items: [s('React', true), s('HTML & CSS', true), s('Angular'), s('Vite'), s('Responsive, accessible UI')],
   },
   {
-    area: 'Data',
-    items: ['PostgreSQL', 'Prisma', 'SQL Server', 'MongoDB', 'Redis & BullMQ', 'Supabase'],
+    area: 'Back end',
+    items: [
+      s('Node.js & Express', true),
+      s('ASP.NET Core', true),
+      s('REST & GraphQL APIs', true),
+      s('FastAPI'),
+      s('JWT & OAuth'),
+      s('Socket.IO'),
+      s('Webhooks & job queues'),
+    ],
   },
   {
-    area: 'Integrations',
-    items: ['Shopify API', 'Meta Marketing API', 'Webhooks', 'WordPress', 'Cloudinary'],
+    area: 'Databases',
+    items: [s('PostgreSQL', true), s('MongoDB', true), s('SQL Server', true), s('Prisma'), s('Redis'), s('Supabase')],
   },
   {
-    area: 'Delivery',
-    items: ['Docker', 'GitHub Actions', 'Jenkins', 'Jest', 'Vercel & Render', 'PM2'],
+    area: 'Tools & delivery',
+    items: [s('Git & GitHub', true), s('Docker'), s('GitHub Actions'), s('Jenkins'), s('Jest'), s('Vercel & Render')],
   },
 ];

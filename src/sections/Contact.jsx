@@ -58,7 +58,7 @@ export default function Contact() {
           </li>
           <li>
             <a href={profile.resume} download>
-              Résumé (PDF)
+              Resume (PDF)
             </a>
           </li>
         </ul>
